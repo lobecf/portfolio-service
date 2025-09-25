@@ -13,14 +13,13 @@ public class EmailController {
     private EmailService emailService;
 
     @PostMapping("/sendEmail")
-    public ResponseEntity<String> sendEmail(@RequestBody EmailRequest emailRequest) {
+    public ResponseEntity<Object> sendEmail(@RequestBody EmailRequest emailRequest) {
         try {
-            // Send message to lobecf@gmail.com from charlielobeinfo@gmail.com
-            emailService.sendEmail("lobecf@gmail.com", emailRequest.getUserEmail(), emailRequest.getMessageContent());
-            return ResponseEntity.ok("Email sent successfully!");
+            emailService.sendEmail("lobecf@gmail.com", emailRequest.getFirstName(), emailRequest.getLastName(), emailRequest.getUserEmail(), emailRequest.getMessageContent());
+            return ResponseEntity.ok(new ApiResponse("success", "Email sent successfully!"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error sending email: " + e.getMessage());
+                    .body(new ApiResponse("error", "Error sending email: " + e.getMessage()));
         }
     }
 }
